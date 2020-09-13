@@ -1,0 +1,3 @@
+include ':androidstatserviceapi-release'
+include ':app'
+rootProject.name = "TelemetriaApp"
