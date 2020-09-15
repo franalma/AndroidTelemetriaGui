@@ -1,4 +1,4 @@
-package com.diusframi.android.telemetriaapp;
+package com.diusframi.android.telemetriaapp.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,23 +11,17 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.diusframi.android.androidstatserviceapi.DandroidStats;
-import com.diusframi.android.telemetriaapp.ui.Fragment1;
-import com.diusframi.android.telemetriaapp.ui.Fragment2;
-import com.diusframi.android.telemetriaapp.ui.Utils;
+import com.diusframi.android.telemetriaapp.R;
+import com.diusframi.android.telemetriaapp.model.LogInfo;
 import com.google.android.material.navigation.NavigationView;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private  ProgressDialog dialog;
-
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
-
-
-
 
     private void setupView(){
         toolbar = findViewById(R.id.toolbar);
@@ -47,13 +41,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass;
         switch(menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
-                fragmentClass = Fragment1.class;
-                break;
             case R.id.nav_second_fragment:
                 fragmentClass = Fragment2.class;
                 break;
@@ -67,20 +57,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-        // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);
-        // Set action bar title
         setTitle(menuItem.getTitle());
-        // Close the navigation drawer
         mDrawer.closeDrawers();
     }
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +78,7 @@ public class MainActivity extends AppCompatActivity {
             if (status){
                 dialog.dismiss();
                 String result = DandroidStats.getInstance().getLogInfo();
-                try{
-                    JSONArray jac = new JSONArray(result);
-                   for (int i =0; i<jac.length(); i++){
-                        JSONObject joc =  (JSONObject)jac.get(i);
-                        System.out.println("----joc: "+joc.toString());
-                   }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                LogInfo.getInstance().parseLogLevel(result);
             }
         }
 
@@ -120,7 +94,4 @@ public class MainActivity extends AppCompatActivity {
         DandroidStats.getInstance().init(MainActivity.this,dandroidStatsDelegate);
 
     }
-
-
-
 }
