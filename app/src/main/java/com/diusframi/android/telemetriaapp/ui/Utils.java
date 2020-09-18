@@ -1,12 +1,16 @@
 package com.diusframi.android.telemetriaapp.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 
 import com.diusframi.android.telemetriaapp.R;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class Utils {
 
@@ -26,5 +30,15 @@ public class Utils {
                 });
 
         return builder.create();
+    }
+
+    public static void restartApp(Context context){
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        if (context instanceof Activity) {
+            ((Activity) context).finish();
+        }
+        Runtime.getRuntime().exit(0);
     }
 }

@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.diusframi.android.androidstatserviceapi.DandroidStats;
 import com.diusframi.android.telemetriaapp.R;
 import com.diusframi.android.telemetriaapp.model.LogInfo;
 import com.diusframi.android.telemetriaapp.model.LogItem;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 public class Fragment1 extends Fragment {
 
     private void loadWifiLogs(View view){
+        String result = DandroidStats.getInstance().getLogInfo();
+        LogInfo.getInstance().parseLogLevel(result);
         ArrayList<LogItem> list = LogInfo.getInstance().getWifiLogs();
         ListView listView = view.findViewById(R.id.id_list_wifi_logs);
         ArrayList<String> items = new ArrayList<>();
@@ -41,13 +45,9 @@ public class Fragment1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_1, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_1, container, false);
         loadWifiLogs(view);
+        return view;
     }
+
 }

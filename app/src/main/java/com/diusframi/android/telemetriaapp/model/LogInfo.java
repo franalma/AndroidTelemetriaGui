@@ -12,18 +12,17 @@ public class LogInfo {
     public void parseLogLevel(String input){
         try{
             JSONArray logs = new JSONArray(input);
+            batteryLogs.clear();;
+            wifiLogs.clear();
             for (int i = 0; i < logs.length(); i++){
                 JSONObject joc = logs.getJSONObject(i);
                 LogItem item = (new LogItem(joc.getString("tag"),
                         joc.getString("log"),
                         joc.getString("time")));
-                System.out.println("----item: "+item);
                 if (item.getLog().toLowerCase().contains("battery")){
                     batteryLogs.add(item);
-                    System.out.println("---battery");
                 }else if (item.getLog().toLowerCase().contains("wiifstats")){
                     wifiLogs.add(item);
-                    System.out.println("---wifi");
                 }
 
             }

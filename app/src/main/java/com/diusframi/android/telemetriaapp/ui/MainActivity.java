@@ -42,26 +42,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectDrawerItem(MenuItem menuItem) {
         Fragment fragment = null;
-        Class fragmentClass;
+        Class fragmentClass = null;
         switch(menuItem.getItemId()) {
             case R.id.nav_second_fragment:
                 fragmentClass = Fragment2.class;
                 break;
+            case R.id.id_clear_logs:{
+                boolean res = DandroidStats.getInstance().clearStatLogs();
+//                Utils.restartApp(getApplicationContext());
+                break;
+            }
+
             default:
                 fragmentClass = Fragment1.class;
         }
 
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
+            if (fragmentClass != null){
+                fragment = (Fragment) fragmentClass.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                menuItem.setChecked(true);
+                setTitle(menuItem.getTitle());
+                mDrawer.closeDrawers();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        menuItem.setChecked(true);
-        setTitle(menuItem.getTitle());
-        mDrawer.closeDrawers();
+
     }
 
     @Override
@@ -77,8 +87,7 @@ public class MainActivity extends AppCompatActivity {
         public void onInit(boolean status) {
             if (status){
                 dialog.dismiss();
-                String result = DandroidStats.getInstance().getLogInfo();
-                LogInfo.getInstance().parseLogLevel(result);
+
             }
         }
 
