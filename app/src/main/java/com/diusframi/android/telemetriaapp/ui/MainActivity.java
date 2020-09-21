@@ -12,9 +12,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.diusframi.android.androidstatserviceapi.DandroidStats;
 import com.diusframi.android.telemetriaapp.R;
-import com.diusframi.android.telemetriaapp.model.LogInfo;
 import com.google.android.material.navigation.NavigationView;
-
+import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,15 +40,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        Fragment fragment = null;
+        Fragment fragment;
         Class fragmentClass = null;
         switch(menuItem.getItemId()) {
             case R.id.nav_second_fragment:
                 fragmentClass = Fragment2.class;
                 break;
             case R.id.id_clear_logs:{
-                boolean res = DandroidStats.getInstance().clearStatLogs();
-//                Utils.restartApp(getApplicationContext());
+                DandroidStats.getInstance().clearStatLogs();
+                break;
+            }
+            case R.id.id_get_pax_logs:{
+                DandroidStats.getInstance().getPaxSdkLogs(dandroidStatsDelegate);
                 break;
             }
 
@@ -95,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
         public void onConnectionLost() {
             Toast.makeText(getApplicationContext(),
                     "Connection to stats service lost", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onPaxLogsReceived(JSONArray data) {
+            System.out.println("----on logs received: "+ data.toString());
         }
     };
 

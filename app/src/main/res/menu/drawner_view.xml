@@ -11,6 +11,8 @@
             android:icon="@mipmap/battery_icon"
             />
     </group>
+    <item android:id="@+id/id_get_pax_logs"
+        android:title="Get PAX logs"/>
     <item android:id="@+id/id_clear_logs"
         android:title="Clear logs"/>
 </menu>
